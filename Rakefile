@@ -23,17 +23,24 @@ namespace :foretagstennis do
       rows = doc.css('.PageBodyDiv table:last tbody tr')
       rows.each do |row|
         cells = row.css('td')
-        home_team, away_team = cells[2].content.gsub("\r\n", "").strip.split('-', 2)
+        home_team, away_team = cells[2].content.scrub.split('-', 2)
         next if (home_team == 'Lag')
-        date = cells[0].content.gsub("\r\n", "").strip
-        time = cells[1].content.gsub("\r\n", "").strip
+        date = cells[0].content.scrub
+        time = cells[1].content.scrub
         next if date == time
-        lanes = cells[3].content.gsub("\r\n", "").strip.gsub(/(\s|\u00A0)+/, ' ')
+        lanes = cells[3].content.scrub
         currentTime = Time.new
 
         date = "#{currentTime.year}-#{get_month(date)}-#{get_day(date)}"
-        matches << {home_team: home_team, away_team: away_team, date: date, time: time, lanes: lanes, division: division}
 
+        matches << {
+          home_team: home_team,
+          away_team: away_team,
+          date: date,
+          time: time,
+          lanes: lanes,
+          division: division
+        }
       end
     end
 
@@ -49,11 +56,11 @@ namespace :foretagstennis do
       rows.each do |row|
         cellContainers = row.css('td')
         cells = cellContainers
-        next if cells[1].content.strip.gsub("\r\n","") == 'Lag'
-        team_ranking = cells[0].content.strip
-        team_name = cells[1].content.strip.gsub("&nbsp;","")
-        contact = cells[2].content.strip
-        phone = cells[3].content.strip
+        next if cells[1].content.scrub == 'Lag'
+        team_ranking = cells[0].content.scrub
+        team_name = cells[1].content.scrub
+        contact = cells[2].content.scrub
+        phone = cells[3].content.scrub
         next if team_name == phone
         email = ''
         email_cell = cellContainers[4].css('p img')
@@ -63,16 +70,16 @@ namespace :foretagstennis do
 
         if email_cell[0] != nil
           email = email_cell[0].attributes["src"].value.gsub("/IdrottOnlineKlubb/Partille/foreningenpartilletennis-tennis/foretagstennis/Schemadiv.#{division}/EmailEncoderEmbed.aspx?it=", "")	
-          email = decode_email(CGI.unescape(email)).sub('mailto:', '').strip
+          email = decode_email(CGI.unescape(email)).sub('mailto:', '').scrub
         end
 
         teams << ({
-          :team_name => scrub(team_name),
+          :team_name => team_name,
           :division => division,
-          :team_ranking => scrub(team_ranking), 
-          :contact => scrub(contact), 
-          :phone => scrub(phone),
-          :email => scrub(email)
+          :team_ranking => team_ranking,
+          :contact => contact,
+          :phone => phone,
+          :email => email
         })
       end
     end
@@ -83,6 +90,9 @@ end
 
 namespace :motionserier do
   
+  desc "Get both matches and teams"
+  task :all => ["motionserier:matches", "motionserier:teams"]
+
   task :fetch do
     @docs = Hash.new
 		# for division in ['Damsingel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3'] do
@@ -101,8 +111,8 @@ namespace :motionserier do
         rows.each do |row|
           cells = row.css('td')
           next if cells.length < 3
-          date = cells[0].content.gsub("\r\n", "").strip
-          time = cells[1].content.gsub("\r\n", "").strip
+          date = cells[0].content.scrub
+          time = cells[1].content.scrub
           home_team_index = 3
           away_team_index = 4
           lanes_index = 2
@@ -111,13 +121,20 @@ namespace :motionserier do
             away_team_index = 3
             lanes_index = 4
           end
-          home_team = cells[home_team_index].content.gsub("\r\n", "").strip
-          away_team = cells[away_team_index].content.gsub("\r\n", "").strip
+          home_team = cells[home_team_index].content.scrub
+          away_team = cells[away_team_index].content.scrub
           next if (time == 'Tid')
           next if date == time
-          lanes = cells[lanes_index].content.gsub("\r\n", "").strip.gsub(/(\s|\u00A0)+/, ' ')
-          matches << {home_team: home_team, away_team: away_team, date: date, time: time, lanes: lanes, division: division}
-          
+          lanes = cells[lanes_index].content.scrub
+
+          matches << {
+            home_team: home_team,
+            away_team: away_team,
+            date: date,
+            time: time,
+            lanes: lanes,
+            division: division
+          }
         end
 		end
 
@@ -138,25 +155,23 @@ namespace :motionserier do
         offset = 0
         next if cells.length < 3
         offset = 1 if cells.length > 5
-        next if cells[1 + offset].content.strip.gsub("\r\n","") == 'Lag'
-        next if cells[1 + offset].content.strip.gsub("\r\n","") == 'Namn'
-        team_ranking = cells[0 + offset].content.strip
+        next if cells[1 + offset].content.scrub == 'Lag'
+        next if cells[1 + offset].content.scrub == 'Namn'
+        team_ranking = cells[0 + offset].content.scrub
         next if team_ranking.to_i == 0
-        team_name = cells[1 + offset].content.strip.gsub("&nbsp;", "").gsub(/(\s|\u00A0)+/, ' ')
+        team_name = cells[1 + offset].content.scrub
         email =  get_email(cells[2 + offset].css('p img'), division)
-        phone = cells[3 + offset].content.strip
-        phone = cells[4 + offset].content.strip if (cells.length > 4)
+        phone = cells[3 + offset].content.scrub
+        phone = cells[4 + offset].content.scrub if (cells.length > 4)
         phone = "0721-843748" if (team_name == "Johan Hellström" and phone.length < 2)
 
-        @teams[team_ranking] = {:team_name => team_name, :contact => '', :phone => phone, :email => email}
-
 			  teams << ({
-          :team_name => scrub(team_name),
+          :team_name => team_name,
           :division => division,
-          :team_ranking => scrub(team_ranking), 
+          :team_ranking => team_ranking,
           :contact => '',
-          :phone => scrub(phone),
-          :email => scrub(email)
+          :phone => phone,
+          :email => email
         })
       end
 		end

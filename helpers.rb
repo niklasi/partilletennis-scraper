@@ -1,5 +1,21 @@
+class String
+  def scrub
+    value = self
+    if value.start_with? "KodChef"
+      return "KodChef"
+    end
+
+    value
+      .gsub("\r\n", "")
+      .gsub("&nbsp;", "")
+      .strip
+      .gsub(/(\s|\u00A0)+/, ' ')
+  end
+end
+
 def get_day(date)
   day = date.split(" ")[0]
+
   return day if day.length > 1
 
   return "0#{day}"
@@ -20,30 +36,6 @@ def get_month(date)
   return "12" if date.include?("dec")
 end
 
-def scrub(value)
-  if value.start_with? "KodChef"
-    return "KodChef"
-  end
-  value = value.gsub("\r\n", "")
-  value = value.gsub("&nbsp;", "")
-  # If there is more than one space between words this will fix it
-  return value.split(" ").join(" ")
-end
-
-def get_month_number(month)
-  return "01" if month == "jan"
-  return "02" if month == "feb"
-  return "03" if month == "mar"
-  return "04" if month == "apr"
-  return "05" if month == "maj"
-  return "06" if month == "jun"
-  return "07" if month == "jul"
-  return "08" if month == "aug"
-  return "09" if month == "sep"
-  return "10" if month == "okt"
-  return "11" if month == "nov"
-  return "12" if month == "dec"
-end
 
 def get_season(date)
   return "fall" if date.include?("aug") || date.include?("sep") || date.include?("okt") || date.include?("nov") || date.include?("dec")
