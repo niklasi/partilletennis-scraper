@@ -1,15 +1,11 @@
 class String
   def scrub
-    value = self
-    if value.start_with? "KodChef"
-      return "KodChef"
-    end
-
-    value
+    self
       .gsub("\r\n", "")
       .gsub("&nbsp;", "")
-      .strip
       .gsub(/(\s|\u00A0)+/, ' ')
+      .split(" ")
+      .join(" ")
   end
 end
 
