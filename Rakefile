@@ -69,10 +69,7 @@ namespace :foretagstennis do
           email_cell = cellContainers[4].css('h2 img')
         end
 
-        if email_cell[0] != nil
-          email = email_cell[0].attributes["src"].value.gsub("/IdrottOnlineKlubb/Partille/foreningenpartilletennis-tennis/foretagstennis/Schemadiv.#{division}/EmailEncoderEmbed.aspx?it=", "")	
-          email = decode_email(CGI.unescape(email)).sub('mailto:', '').scrub
-        end
+        email = get_email email_cell if email_cell[0] != nil
 
         teams << ({
           :team_name => team_name,
@@ -104,7 +101,6 @@ namespace :motionserier do
   desc "Get alll matches"
   task :matches => :fetch do
     matches = Array.new
-    # for division in ['Damsingel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3'] do
     @docs.each do | division, doc |
       rows = doc.css('.PageBodyDiv table:last tbody tr')
       rows.each do |row|
@@ -156,10 +152,15 @@ namespace :motionserier do
         team_ranking = cells[0 + offset].content.scrub
         next if team_ranking.to_i == 0
         team_name = cells[1 + offset].content.scrub
-        email =  get_email(cells[2 + offset].css('p img'), division)
+
+        email = ''
+        email_cell = cells[2 + offset].css('p img')
+        email = get_email email_cell if email_cell[0] != nil
+        email = 'kerstinblundin@gmail.com' if email == 'erstinblundin@gmail.com'
+        email = 'ewabazar@yahoo.com' if email == 'wabazar@yahoo.com'
+
         phone = cells[3 + offset].content.scrub
         phone = cells[4 + offset].content.scrub if (cells.length > 4)
-        phone = "0721-843748" if (team_name == "Johan Hellström" and phone.length < 2)
 
         teams << ({
           :team_name => team_name,
@@ -174,21 +175,11 @@ namespace :motionserier do
 
     puts teams.to_json
   end
-
-  def get_email(email_cell, division)
-    email = ''
-    if email_cell[0] == nil
-      puts email_cell
-      email_cell = cellContainers[2].css('h2 img')
-    end
-
-    if email_cell[0] != nil
-      email = email_cell[0].attributes["src"].value.gsub("/IdrottOnlineKlubb/Partille/foreningenpartilletennis-tennis/Motionsserier/#{division}/EmailEncoderEmbed.aspx?it=", "")	
-      email = decode_email(CGI.unescape(email)).sub('mailto:', '').strip
-    end
-    email = 'kerstinblundin@gmail.com' if email == 'erstinblundin@gmail.com'
-    email = 'ewabazar@yahoo.com' if email == 'wabazar@yahoo.com'
-    email
-  end
 end
 
+def get_email (email_cell)
+  email = email_cell[0].attributes["src"].value
+  index = email.index("?it=")
+  email = email[index + 4, email.length]
+  decode_email(CGI.unescape(email)).sub('mailto:', '').scrub
+end
