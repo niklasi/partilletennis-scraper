@@ -171,8 +171,9 @@ namespace :motionserier do
 
         email = ''
         email = get_email email_cell if email_cell[0] != nil
-        email = 'kerstinblundin@gmail.com' if email == 'erstinblundin@gmail.com'
-        email = 'ewabazar@yahoo.com' if email == 'wabazar@yahoo.com'
+        # Malformed email adresses on partilletennis home page
+        email = 'k' + email if email.start_with? 'ersti'
+        email = 'e' + email if email.start_with? 'wab'
 
         phone = cells[3 + offset].content.scrub
         phone = cells[4 + offset].content.scrub if (cells.length > 4)
