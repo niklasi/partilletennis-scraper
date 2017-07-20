@@ -1,5 +1,5 @@
 class String
-  def scrub
+  def wash
     self
       .gsub("\r\n", "")
       .gsub("&nbsp;", "")

@@ -25,12 +25,12 @@ namespace :foretagstennis do
       rows = doc.css('.PageBodyDiv table:last tbody tr')
       rows.each do |row|
         cells = row.css('td')
-        home_team, away_team = cells[2].content.scrub.split('-', 2)
+        home_team, away_team = cells[2].content.wash.split('-', 2)
         next if (home_team == 'Lag')
-        date = cells[0].content.scrub
-        time = cells[1].content.scrub
+        date = cells[0].content.wash
+        time = cells[1].content.wash
         next if date == time
-        lanes = cells[3].content.scrub
+        lanes = cells[3].content.wash
         currentTime = Time.new
 
         date = "#{currentTime.year}-#{get_month(date)}-#{get_day(date)}"
@@ -58,12 +58,12 @@ namespace :foretagstennis do
         cellContainers = row.css('td')
         cells = cellContainers
 
-        next if cells[1].content.scrub == 'Lag'
+        next if cells[1].content.wash == 'Lag'
 
-        team_ranking = cells[0].content.scrub
-        team_name = cells[1].content.scrub
-        contact = cells[2].content.scrub
-        phone = cells[3].content.scrub
+        team_ranking = cells[0].content.wash
+        team_name = cells[1].content.wash
+        contact = cells[2].content.wash
+        phone = cells[3].content.wash
 
         next if team_name == phone
 
@@ -110,8 +110,8 @@ namespace :motionserier do
 
         next if cells.length < 3
 
-        date = cells[0].content.scrub
-        time = cells[1].content.scrub
+        date = cells[0].content.wash
+        time = cells[1].content.wash
         home_team_index = 3
         away_team_index = 4
         lanes_index = 2
@@ -122,13 +122,13 @@ namespace :motionserier do
           lanes_index = 4
         end
 
-        home_team = cells[home_team_index].content.scrub
-        away_team = cells[away_team_index].content.scrub
+        home_team = cells[home_team_index].content.wash
+        away_team = cells[away_team_index].content.wash
 
         next if (time == 'Tid')
         next if date == time
 
-        lanes = cells[lanes_index].content.scrub
+        lanes = cells[lanes_index].content.wash
 
         matches << {
           home_team: home_team,
@@ -158,14 +158,14 @@ namespace :motionserier do
 
         offset = 1 if cells.length > 5
 
-        next if cells[1 + offset].content.scrub == 'Lag'
-        next if cells[1 + offset].content.scrub == 'Namn'
+        next if cells[1 + offset].content.wash == 'Lag'
+        next if cells[1 + offset].content.wash == 'Namn'
 
-        team_ranking = cells[0 + offset].content.scrub
+        team_ranking = cells[0 + offset].content.wash
 
         next if team_ranking.to_i == 0
 
-        team_name = cells[1 + offset].content.scrub
+        team_name = cells[1 + offset].content.wash
 
         email_cell = cells[2 + offset].css('p img')
 
@@ -175,8 +175,8 @@ namespace :motionserier do
         email = 'k' + email if email.start_with? 'ersti'
         email = 'e' + email if email.start_with? 'wab'
 
-        phone = cells[3 + offset].content.scrub
-        phone = cells[4 + offset].content.scrub if (cells.length > 4)
+        phone = cells[3 + offset].content.wash
+        phone = cells[4 + offset].content.wash if (cells.length > 4)
 
         teams << ({
           :team_name => team_name,
@@ -197,5 +197,5 @@ def get_email (email_cell)
   email = email_cell[0].attributes["src"].value
   index = email.index("?it=")
   email = email[index + 4, email.length]
-  decode_email(CGI.unescape(email)).sub('mailto:', '').scrub
+  decode_email(CGI.unescape(email)).sub('mailto:', '').wash
 end
