@@ -57,18 +57,20 @@ namespace :foretagstennis do
       rows.each do |row|
         cellContainers = row.css('td')
         cells = cellContainers
+
         next if cells[1].content.scrub == 'Lag'
+
         team_ranking = cells[0].content.scrub
         team_name = cells[1].content.scrub
         contact = cells[2].content.scrub
         phone = cells[3].content.scrub
-        next if team_name == phone
-        email = ''
-        email_cell = cellContainers[4].css('p img')
-        if email_cell[0] == nil
-          email_cell = cellContainers[4].css('h2 img')
-        end
 
+        next if team_name == phone
+
+        email_cell = cellContainers[4].css('p img')
+        email_cell = cellContainers[4].css('h2 img') if email_cell[0] == nil
+          
+        email = ''
         email = get_email email_cell if email_cell[0] != nil
 
         teams << ({
@@ -105,21 +107,27 @@ namespace :motionserier do
       rows = doc.css('.PageBodyDiv table:last tbody tr')
       rows.each do |row|
         cells = row.css('td')
+
         next if cells.length < 3
+
         date = cells[0].content.scrub
         time = cells[1].content.scrub
         home_team_index = 3
         away_team_index = 4
         lanes_index = 2
+
         if (division == 'Damsingel') then
           home_team_index = 2
           away_team_index = 3
           lanes_index = 4
         end
+
         home_team = cells[home_team_index].content.scrub
         away_team = cells[away_team_index].content.scrub
+
         next if (time == 'Tid')
         next if date == time
+
         lanes = cells[lanes_index].content.scrub
 
         matches << {
@@ -145,16 +153,23 @@ namespace :motionserier do
         cellContainers = row.css('td')
         cells = cellContainers
         offset = 0
+
         next if cells.length < 3
+
         offset = 1 if cells.length > 5
+
         next if cells[1 + offset].content.scrub == 'Lag'
         next if cells[1 + offset].content.scrub == 'Namn'
+
         team_ranking = cells[0 + offset].content.scrub
+
         next if team_ranking.to_i == 0
+
         team_name = cells[1 + offset].content.scrub
 
-        email = ''
         email_cell = cells[2 + offset].css('p img')
+
+        email = ''
         email = get_email email_cell if email_cell[0] != nil
         email = 'kerstinblundin@gmail.com' if email == 'erstinblundin@gmail.com'
         email = 'ewabazar@yahoo.com' if email == 'wabazar@yahoo.com'
