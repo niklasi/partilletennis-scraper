@@ -13,7 +13,7 @@ namespace :foretagstennis do
   task :fetch do
     @docs = Hash.new
     for division in 1..3 do
-      @docs[division] = Nokogiri::HTML(open("http://idrottonline.se/ForeningenPartilleTennis-Tennis/foretagstennis/Schemadiv.#{division}/"))
+      @docs[division] = Nokogiri::HTML(open("http://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserie/Schemadiv.#{division}/"))
     end
   end
 
@@ -28,6 +28,7 @@ namespace :foretagstennis do
         home_team, away_team = cells[2].content.wash.split('-', 2)
         next if (home_team == 'Lag')
         date = cells[0].content.wash
+
         time = cells[1].content.wash
         next if date == time
         lanes = cells[3].content.wash
@@ -71,7 +72,7 @@ namespace :foretagstennis do
         email_cell = cellContainers[4].css('h2 img') if email_cell[0] == nil
           
         email = ''
-        email = get_email email_cell if email_cell[0] != nil
+        email = get_email email_cell[0] if email_cell[0] != nil
 
         teams << ({
           :team_name => team_name,
@@ -95,7 +96,7 @@ namespace :motionserier do
 
   task :fetch do
     @docs = Hash.new
-    for division in ['Damsingel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3'] do
+    for division in ['Damsingel', 'Mixeddubbel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3', 'HerrsingelDiv4'] do
       @docs[division] = Nokogiri::HTML(open("http://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
     end
   end
@@ -104,7 +105,7 @@ namespace :motionserier do
   task :matches => :fetch do
     matches = Array.new
     @docs.each do | division, doc |
-      rows = doc.css('.PageBodyDiv table:last tbody tr')
+      rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
       rows.each do |row|
         cells = row.css('td')
 
@@ -115,21 +116,37 @@ namespace :motionserier do
         home_team_index = 3
         away_team_index = 4
         lanes_index = 2
+        
+        if (division == 'Mixeddubbel')
+          next if date == 'reservtid'
+          team_index = 2
+          teams = cells[team_index].content.wash.split('-')
+          home_team = teams[0]
+          away_team = teams[1]
+          lanes_index = 3
 
-        if (division == 'Damsingel') then
-          home_team_index = 2
-          away_team_index = 3
-          lanes_index = 4
+          dateFix = date.split('/')
+          if (dateFix.length > 0)
+            day_zero = ''
+            day_zero = '0' if dateFix[0].length == 1
+            date = "2018-0#{dateFix[1]}-#{day_zero}#{dateFix[0]}"
+          end
+
+          timeFix = time.split('-')
+          if (timeFix.length > 0)
+            time = timeFix[0]
+          end
+        else
+          home_team = cells[home_team_index].content.wash
+          away_team = cells[away_team_index].content.wash
         end
-
-        home_team = cells[home_team_index].content.wash
-        away_team = cells[away_team_index].content.wash
 
         next if (time == 'Tid')
         next if date == time
 
         lanes = cells[lanes_index].content.wash
 
+        # division = 'DamdubbelDiv2'
         matches << {
           home_team: home_team,
           away_team: away_team,
@@ -148,43 +165,43 @@ namespace :motionserier do
   task :teams => :fetch do
     teams = Array.new
     @docs.each do | division, doc |
-      rows = doc.css('.PageBodyDiv table:first tbody tr')
+      rows = doc.css('.PageBodyDiv table:nth(1) tbody tr')
       rows.each do |row|
-        cellContainers = row.css('td')
-        cells = cellContainers
-        offset = 0
 
-        next if cells.length < 3
+        cells = Array.new
+        row.css('td').each do |cell|
 
-        offset = 1 if cells.length > 5
+          cell_content = ''
 
-        next if cells[1 + offset].content.wash == 'Lag'
-        next if cells[1 + offset].content.wash == 'Namn'
+          email_cells = cell.css('p img')
+          if (email_cells.length > 0)
+            emails = Array.new
+            email_cells.each do |email_cell|
+              emails.push get_email(email_cell)
+            end
+            cell_content = emails.join(' / ')
+          else
+            cell_content = cell.content.wash 
+            paragraphs = Array.new
+            cell.css('p').each do |paragraph|
+              paragraphs.push paragraph.content.wash
+            end
+            cell_content = paragraphs.join(' / ') if paragraphs.length > 0
+          end
+          cells << cell_content if cell_content != ''
+        end
 
-        team_ranking = cells[0 + offset].content.wash
+        next if cells[0] == 'Namn'
+        next if cells[0].to_i == 0
 
-        next if team_ranking.to_i == 0
-
-        team_name = cells[1 + offset].content.wash
-
-        email_cell = cells[2 + offset].css('p img')
-
-        email = ''
-        email = get_email email_cell if email_cell[0] != nil
-        # Malformed email adresses on partilletennis home page
-        email = 'k' + email if email.start_with? 'ersti'
-        email = 'e' + email if email.start_with? 'wab'
-
-        phone = cells[3 + offset].content.wash
-        phone = cells[4 + offset].content.wash if (cells.length > 4)
-
+        # division = 'DamdubbelDiv2'
         teams << ({
-          :team_name => team_name,
+          :team_name => cells[1],
           :division => division,
-          :team_ranking => team_ranking,
+          :team_ranking => cells[0],
           :contact => '',
-          :phone => phone,
-          :email => email
+          :phone => cells[cells.length - 1],
+          :email => cells[2]
         })
       end
     end
@@ -194,7 +211,7 @@ namespace :motionserier do
 end
 
 def get_email (email_cell)
-  email = email_cell[0].attributes["src"].value
+  email = email_cell.attributes["src"].value
   index = email.index("?it=")
   email = email[index + 4, email.length]
   decode_email(CGI.unescape(email)).sub('mailto:', '').wash
