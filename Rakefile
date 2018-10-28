@@ -116,8 +116,7 @@ namespace :motionserier do
         home_team_index = 3
         away_team_index = 4
         lanes_index = 2
-        
-        if (division == 'Mixeddubbel')
+        if (division.start_with? 'Mixeddubbel')
           next if date == 'reservtid'
           team_index = 2
           teams = cells[team_index].content.wash.split('-')
