@@ -197,7 +197,7 @@ namespace :motionserier do
         teams << ({
           :team_name => cells[1],
           :division => division,
-          :team_ranking => cells[0],
+          :team_ranking => cells[0].to_i.to_s,
           :contact => '',
           :phone => cells[cells.length - 1],
           :email => cells[2]
