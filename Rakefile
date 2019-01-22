@@ -13,7 +13,7 @@ namespace :foretagstennis do
   task :fetch do
     @docs = Hash.new
     for division in 1..3 do
-      @docs[division] = Nokogiri::HTML(open("http://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserie/Schemadiv.#{division}/"))
+      @docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserien/Schemadiv.#{division}/"))
     end
   end
 
@@ -97,7 +97,7 @@ namespace :motionserier do
   task :fetch do
     @docs = Hash.new
     for division in ['Damsingel', 'Mixeddubbel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3', 'HerrsingelDiv4'] do
-      @docs[division] = Nokogiri::HTML(open("http://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
+      @docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
     end
   end
 
