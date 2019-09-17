@@ -96,7 +96,8 @@ namespace :motionserier do
 
   task :fetch do
     @docs = Hash.new
-    for division in ['Damsingel', 'Mixeddubbel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3', 'HerrsingelDiv4'] do
+    # for division in ['Damsingel', 'Mixeddubbel', 'HerrsingelDiv1', 'HerrsingelDiv2', 'HerrsingelDiv3', 'HerrsingelDiv4'] do
+    for division in []
       @docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
     end
   end
@@ -106,6 +107,7 @@ namespace :motionserier do
     matches = Array.new
     @docs.each do | division, doc |
       rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
+      # rows = doc.css('.PageBodyDiv div div table tbody tr')
       rows.each do |row|
         cells = row.css('td')
 
@@ -118,18 +120,18 @@ namespace :motionserier do
         lanes_index = 2
         if (division.start_with? 'Mixeddubbel')
           next if date == 'reservtid'
-          team_index = 2
+          team_index = 3
           teams = cells[team_index].content.wash.split('-')
           home_team = teams[0]
           away_team = teams[1]
-          lanes_index = 3
+          lanes_index = 2
 
-          dateFix = date.split('/')
-          if (dateFix.length > 0)
-            day_zero = ''
-            day_zero = '0' if dateFix[0].length == 1
-            date = "2018-0#{dateFix[1]}-#{day_zero}#{dateFix[0]}"
-          end
+          # dateFix = date.split('/')
+          # if (dateFix.length > 0)
+          #   day_zero = ''
+          #   day_zero = '0' if dateFix[0].length == 1
+          #   date = "2018-0#{dateFix[1]}-#{day_zero}#{dateFix[0]}"
+          # end
 
           timeFix = time.split('-')
           if (timeFix.length > 0)
@@ -176,7 +178,11 @@ namespace :motionserier do
           if (email_cells.length > 0)
             emails = Array.new
             email_cells.each do |email_cell|
-              emails.push get_email(email_cell)
+              begin
+                emails.push get_email(email_cell)
+              rescue
+                emails.push 'ingela.eliasson@kungsbacka.se'
+              end
             end
             cell_content = emails.join(' / ')
           else
@@ -192,6 +198,7 @@ namespace :motionserier do
 
         next if cells[0] == 'Namn'
         next if cells[0].to_i == 0
+        next if cells[0].to_i == 2019
 
         # division = 'DamdubbelDiv2'
         teams << ({
