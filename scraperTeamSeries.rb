@@ -5,7 +5,7 @@ require "cgi"
 require "./helpers"
 
 
-def foretagstennis (division)
+def team_series (division)
   docs = Hash.new
   docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserien/Schemadiv.#{division}/"))
 

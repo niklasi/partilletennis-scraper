@@ -5,12 +5,29 @@
   %body
     %div
       %div{:class => "menu"}
-        %div
-          %a(href="/foretagstennis/1") Division 1
-        %div
-          %a(href="/foretagstennis/2") Division 2
-        %div
-          %a(href="/foretagstennis/3") Division 3
+        %h4= "Lagserien"
+        %ul
+          %li
+            %a(href="/lagserien/1") Division 1
+          %li
+            %a(href="/lagserien/2") Division 2
+          %li
+            %a(href="/lagserien/3") Division 3
+
+        %h4= "Motionserier"
+        %ul
+          %li
+            %a(href="/motionserier/Damsingel") Damsingel
+          %li
+            %a(href="/motionserier/Damdubbel") Damdubbel
+          %li
+            %a(href="/motionserier/HerrsingelDiv1") Herrsingel Div 1
+          %li
+            %a(href="/motionserier/HerrsingelDiv2") Herrsingel Div 2
+          %li
+            %a(href="/motionserier/HerrsingelDiv3") Herrsingel Div 3
+          %li
+            %a(href="/motionserier/Mixeddubbel") Mixeddubbel
 
       %div{:class => "content"}
         %table
