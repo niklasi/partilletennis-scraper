@@ -4,26 +4,26 @@ require "open-uri"
 require "cgi"
 require "./helpers"
 
+module ExcerciseSeries
+  def self.load (division)
+    docs = Hash.new
+    docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
 
-def excercise_series (division)
-  docs = Hash.new
-  docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
+    teams = Array.new
+    matches = Array.new
+    docs.each do |division, doc|
+      createTeam(division, doc) do |team|
+        teams << team
+      end
+      createMatches(division, doc) do |match|
+        matches << match
+      end
+    end
 
-  teams = Array.new
-  matches = Array.new
-  docs.each do |division, doc|
-    createTeam(division, doc) do |team|
-      teams << team
-    end
-    createMatches(division, doc) do |match|
-      matches << match
-    end
+    return {:teams => teams, :matches => matches}
   end
 
-  return {:teams => teams, :matches => matches}
-end
-
-def createTeam (division, doc)
+  def self.createTeam (division, doc)
     rows = doc.css('.PageBodyDiv table:first tbody tr')
     rows.each do |row|
       cells = Array.new
@@ -67,9 +67,9 @@ def createTeam (division, doc)
         :email => cells[2]
       })
     end
-end
+  end
 
-def createMatches (division, doc)
+  def self.createMatches (division, doc)
     rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
     # rows = doc.css('.PageBodyDiv div div table tbody tr')
     rows.each do |row|
@@ -121,11 +121,12 @@ def createMatches (division, doc)
         division: division
       })
     end
-end
+  end
 
-def get_email (email_cell)
-  email = email_cell.attributes["src"].value
-  index = email.index("?it=")
-  email = email[index + 4, email.length]
-  decode_email(CGI.unescape(email)).sub('mailto:', '').wash
+  def self.get_email (email_cell)
+    email = email_cell.attributes["src"].value
+    index = email.index("?it=")
+    email = email[index + 4, email.length]
+    decode_email(CGI.unescape(email)).sub('mailto:', '').wash
+  end
 end

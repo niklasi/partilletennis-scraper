@@ -8,10 +8,11 @@ set :haml, :format => :html5
 set :public_folder, File.dirname(__FILE__) + '/static'
 
 get '/lagserien/:series' do
-  haml :index, :locals => team_series(params[:series])
+  series = TeamSeries.load(params[:series])
+  haml :index, :locals => series 
 end
 
 get '/motionserier/:series' do
-  haml :index, :locals => excercise_series(params[:series])
+  haml :index, :locals => ExcerciseSeries.load(params[:series])
 end
 

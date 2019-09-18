@@ -4,26 +4,26 @@ require "open-uri"
 require "cgi"
 require "./helpers"
 
+module TeamSeries
+  def self.load (division)
+    docs = Hash.new
+    docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserien/Schemadiv.#{division}/"))
 
-def team_series (division)
-  docs = Hash.new
-  docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserien/Schemadiv.#{division}/"))
+    teams = Array.new
+    matches = Array.new
+    docs.each do |division, doc|
+      createTeam(division, doc) do |team|
+        teams << team
+      end
+      createMatches(division, doc) do |match|
+        matches << match
+      end
+    end
 
-  teams = Array.new
-  matches = Array.new
-  docs.each do |division, doc|
-    createTeam(division, doc) do |team|
-      teams << team
-    end
-    createMatches(division, doc) do |match|
-      matches << match
-    end
+    return {:teams => teams, :matches => matches}
   end
 
-  return {:teams => teams, :matches => matches}
-end
-
-def createTeam (division, doc)
+  def self.createTeam (division, doc)
     rows = doc.css('.PageBodyDiv table:first tbody tr')
     rows.each do |row|
       cellContainers = row.css('td')
@@ -53,9 +53,9 @@ def createTeam (division, doc)
         :email => email
       })
     end
-end
+  end
 
-def createMatches (division, doc)
+  def self.createMatches (division, doc)
     rows = doc.css('.PageBodyDiv table:last tbody tr')
     rows.each do |row|
       cells = row.css('td')
@@ -70,7 +70,6 @@ def createMatches (division, doc)
 
       date = "#{currentTime.year}-#{get_month(date)}-#{get_day(date)}"
 
-      puts home_team
       yield ({
         home_team: home_team,
         away_team: away_team,
@@ -80,11 +79,12 @@ def createMatches (division, doc)
         division: division
       })
     end
-end
+  end
 
-def get_email (email_cell)
-  email = email_cell.attributes["src"].value
-  index = email.index("?it=")
-  email = email[index + 4, email.length]
-  decode_email(CGI.unescape(email)).sub('mailto:', '').wash
+  def self.get_email (email_cell)
+    email = email_cell.attributes["src"].value
+    index = email.index("?it=")
+    email = email[index + 4, email.length]
+    decode_email(CGI.unescape(email)).sub('mailto:', '').wash
+  end
 end
