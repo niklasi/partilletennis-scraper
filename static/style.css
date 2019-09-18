@@ -1,19 +1,20 @@
-.menu {
-  float: left;
-  margin-right: 20px;
-  background-color: red;
+a {
+  color: blue;
+}
+
+.container {
+  display: flex;
 }
 
 .content {
-  float: left;
-  width: 80%;
-  background-color: blue;
+  flex-grow: 3;
 }
 
-table {
-  width: 100%;
+.menu {
+  flex-grow: 1;
 }
 
 table td {
   text-align: center;
+  width: 150px;
 }
