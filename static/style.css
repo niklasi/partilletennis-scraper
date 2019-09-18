@@ -1,0 +1,19 @@
+.menu {
+  float: left;
+  margin-right: 20px;
+  background-color: red;
+}
+
+.content {
+  float: left;
+  width: 90%;
+  background-color: blue;
+}
+
+table {
+  width: 100%;
+}
+
+table td {
+  text-align: center;
+}
