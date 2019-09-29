@@ -7,6 +7,10 @@ set :port, 8080
 set :haml, :format => :html5
 set :public_folder, File.dirname(__FILE__) + '/static'
 
+get '/' do
+  haml :index
+end
+
 get '/lagserien/:series' do
   series = TeamSeries.load(params[:series])
   haml :index, :locals => series 

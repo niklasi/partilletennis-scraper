@@ -30,30 +30,32 @@
             %a(href="/motionserier/Mixeddubbel") Mixeddubbel
 
       %div{:class => "content"}
-        %table
-          %tr
-            %th= 'Ranking'
-            %th= 'Team'
-            %th= 'Kontakt'
-            %th= 'Telefon'
-            %th= 'Epost'
-          - teams.each do |team|
+        - if defined? teams
+          %table
             %tr
-              %td= team[:team_ranking]
-              %td= team[:team_name]
-              %td= team[:contact]
-              %td= team[:phone]
-              %td= team[:email]
-        %hr
-        %table
-          %tr
-            %th= 'Datum'
-            %th= 'Tid'
-            %th= 'Lag'
-            %th= 'Banor'
-          - matches.each do |match|
+              %th= 'Ranking'
+              %th= 'Team'
+              %th= 'Kontakt'
+              %th= 'Telefon'
+              %th= 'Epost'
+              - teams.each do |team|
+                %tr
+                  %td= team[:team_ranking]
+                  %td= team[:team_name]
+                  %td= team[:contact]
+                  %td= team[:phone]
+                  %td= team[:email]
+        - if defined? matches
+          %hr
+          %table
             %tr
-              %td= match[:date]
-              %td= match[:time]
-              %td= "#{match[:home_team]}-#{match[:away_team]}"
-              %td= match[:lanes]
+              %th= 'Datum'
+              %th= 'Tid'
+              %th= 'Lag'
+              %th= 'Banor'
+              - matches.each do |match|
+                %tr
+                  %td= match[:date]
+                  %td= match[:time]
+                  %td= "#{match[:home_team]}-#{match[:away_team]}"
+                  %td= match[:lanes]
