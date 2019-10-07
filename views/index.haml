@@ -30,32 +30,35 @@
             %a(href="/motionserier/Mixeddubbel") Mixeddubbel
 
       %div{:class => "content"}
-        - if defined? teams
-          %table
-            %tr
-              %th= 'Ranking'
-              %th= 'Team'
-              %th= 'Kontakt'
-              %th= 'Telefon'
-              %th= 'Epost'
-              - teams.each do |team|
-                %tr
-                  %td= team[:team_ranking]
-                  %td= team[:team_name]
-                  %td= team[:contact]
-                  %td= team[:phone]
-                  %td= team[:email]
-        - if defined? matches
-          %hr
-          %table
-            %tr
-              %th= 'Datum'
-              %th= 'Tid'
-              %th= 'Lag'
-              %th= 'Banor'
-              - matches.each do |match|
-                %tr
-                  %td= match[:date]
-                  %td= match[:time]
-                  %td= "#{match[:home_team]}-#{match[:away_team]}"
-                  %td= match[:lanes]
+        %form{ :action => "", :method => "post"}
+          - if defined? teams
+            %table
+              %tr
+                %th= 'Ranking'
+                %th= 'Team'
+                %th= 'Kontakt'
+                %th= 'Telefon'
+                %th= 'Epost'
+                - teams.each do |team|
+                  %tr
+                    %td
+                      %input{:type => "text", :name => "ranking_" + team[:team_ranking], :value => team[:team_ranking]}
+                    %td= team[:team_name]
+                    %td= team[:contact]
+                    %td= team[:phone]
+                    %td= team[:email]
+          - if defined? matches
+            %hr
+            %table
+              %tr
+                %th= 'Datum'
+                %th= 'Tid'
+                %th= 'Lag'
+                %th= 'Banor'
+                - matches.each do |match|
+                  %tr
+                    %td= match[:date]
+                    %td= match[:time]
+                    %td= "#{match[:home_team]}-#{match[:away_team]}"
+                    %td= match[:lanes]
+          %input{:type => "submit", :value => "Send", :class => "button"}

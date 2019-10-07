@@ -16,7 +16,14 @@ get '/lagserien/:series' do
   haml :index, :locals => series 
 end
 
+post '/lagserien/:series' do
+  haml :index
+end
+
 get '/motionserier/:series' do
   haml :index, :locals => ExcerciseSeries.load(params[:series])
 end
 
+post '/motionserier/:series' do
+  haml :index
+end
