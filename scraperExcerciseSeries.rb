@@ -5,9 +5,11 @@ require "cgi"
 require "./helpers"
 
 module ExcerciseSeries
-  def self.load (series, division = '')
+  def self.load (series)
     docs = Hash.new
-    docs[series] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{series}/"))
+    page = series
+    page = series[0..8] if series.start_with? "Damdubbel"
+    docs[series] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{page}/"))
 
     teams = Array.new
     matches = Array.new
@@ -24,7 +26,11 @@ module ExcerciseSeries
   end
 
   def self.createTeam (series, doc)
-    rows = doc.css('.PageBodyDiv table:first tbody tr')
+    if series == 'DamdubbelDiv2'
+      rows = doc.css('.PageBodyDiv table:nth(3) tbody tr')
+    else
+      rows = doc.css('.PageBodyDiv table:first tbody tr')
+    end
     rows.each do |row|
       cells = Array.new
       row.css('td').each do |cell|
@@ -70,7 +76,11 @@ module ExcerciseSeries
   end
 
   def self.createMatches (series, doc)
-    rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
+    if series == 'DamdubbelDiv2'
+      rows = doc.css('.PageBodyDiv table:nth(4) tbody tr')
+    else
+      rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
+    end
     if rows.length == 0 and series == 'Mixeddubbel'
       rows = doc.css('.PageBodyDiv table:nth-child(1) tbody tr')
     end
