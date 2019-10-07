@@ -15,7 +15,7 @@ module ExcerciseSeries
       createTeam(division, doc) do |team|
         teams << team
       end
-      createMatches(division, doc) do |match|
+      createMatches(division, doc, division) do |match|
         matches << match
       end
     end
@@ -69,8 +69,11 @@ module ExcerciseSeries
     end
   end
 
-  def self.createMatches (division, doc)
+  def self.createMatches (division, doc, context = '')
     rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
+    if rows.length == 0 and context == 'Mixeddubbel'
+      rows = doc.css('.PageBodyDiv table:nth-child(1) tbody tr')
+    end
     # rows = doc.css('.PageBodyDiv div div table tbody tr')
     rows.each do |row|
       cells = row.css('td')
