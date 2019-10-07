@@ -5,17 +5,17 @@ require "cgi"
 require "./helpers"
 
 module ExcerciseSeries
-  def self.load (division)
+  def self.load (series, division = '')
     docs = Hash.new
-    docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{division}/"))
+    docs[series] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/Motionsserier/#{series}/"))
 
     teams = Array.new
     matches = Array.new
-    docs.each do |division, doc|
-      createTeam(division, doc) do |team|
+    docs.each do |series, doc|
+      createTeam(series, doc) do |team|
         teams << team
       end
-      createMatches(division, doc, division) do |match|
+      createMatches(series, doc) do |match|
         matches << match
       end
     end
@@ -23,7 +23,7 @@ module ExcerciseSeries
     return {:teams => teams, :matches => matches}
   end
 
-  def self.createTeam (division, doc)
+  def self.createTeam (series, doc)
     rows = doc.css('.PageBodyDiv table:first tbody tr')
     rows.each do |row|
       cells = Array.new
@@ -57,10 +57,10 @@ module ExcerciseSeries
       next if cells[0].to_i == 0
       next if cells[0].to_i == 2019
 
-      # division = 'DamdubbelDiv2'
+      # series = 'DamdubbelDiv2'
       yield ({
         :team_name => cells[1],
-        :division => division,
+        :division => series,
         :team_ranking => cells[0].to_i.to_s,
         :contact => '',
         :phone => cells[cells.length - 1],
@@ -69,9 +69,9 @@ module ExcerciseSeries
     end
   end
 
-  def self.createMatches (division, doc, context = '')
+  def self.createMatches (series, doc)
     rows = doc.css('.PageBodyDiv table:nth(2) tbody tr')
-    if rows.length == 0 and context == 'Mixeddubbel'
+    if rows.length == 0 and series == 'Mixeddubbel'
       rows = doc.css('.PageBodyDiv table:nth-child(1) tbody tr')
     end
     # rows = doc.css('.PageBodyDiv div div table tbody tr')
@@ -85,7 +85,7 @@ module ExcerciseSeries
       home_team_index = 3
       away_team_index = 4
       lanes_index = 2
-      if (division.start_with? 'Mixeddubbel')
+      if (series.start_with? 'Mixeddubbel')
         next if date == 'reservtid'
         team_index = 3
         teams = cells[team_index].content.wash.split('-')
@@ -114,14 +114,14 @@ module ExcerciseSeries
 
       lanes = cells[lanes_index].content.wash
 
-      # division = 'DamdubbelDiv2'
+      # series = 'DamdubbelDiv2'
       yield ({
         home_team: home_team,
         away_team: away_team,
         date: date,
         time: time,
         lanes: lanes,
-        division: division
+        division: series
       })
     end
   end
