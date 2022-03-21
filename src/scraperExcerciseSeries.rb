@@ -63,7 +63,6 @@ module ExcerciseSeries
       next if cells[0].to_i == 0
       next if cells[0].to_i == 2019
 
-      # series = 'DamdubbelDiv2'
       yield ({
         :team_name => cells[1],
         :division => series,
@@ -95,29 +94,8 @@ module ExcerciseSeries
       home_team_index = 3
       away_team_index = 4
       lanes_index = 2
-      if (series.start_with? 'Mixeddubbel')
-        next if date == 'reservtid'
-        team_index = 3
-        teams = cells[team_index].content.wash.split('-')
-        home_team = teams[0]
-        away_team = teams[1]
-        lanes_index = 2
-
-        # dateFix = date.split('/')
-        # if (dateFix.length > 0)
-        #   day_zero = ''
-        #   day_zero = '0' if dateFix[0].length == 1
-        #   date = "2018-0#{dateFix[1]}-#{day_zero}#{dateFix[0]}"
-        # end
-
-        timeFix = time.split('-')
-        if (timeFix.length > 0)
-          time = timeFix[0]
-        end
-      else
-        home_team = cells[home_team_index].content.wash
-        away_team = cells[away_team_index].content.wash
-      end
+      home_team = cells[home_team_index].content.wash
+      away_team = cells[away_team_index].content.wash
 
       next if (time == 'Tid')
       next if date == time
