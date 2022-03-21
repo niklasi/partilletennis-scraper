@@ -5,7 +5,7 @@ require "cgi"
 require "./helpers"
 
 module TeamSeries
-  def self.load (division)
+  def self.load division
     docs = Hash.new
     docs[division] = Nokogiri::HTML(open("https://idrottonline.se/ForeningenPartilleTennis-Tennis/lagserien/Schemadiv.#{division}/"))
 
@@ -23,7 +23,7 @@ module TeamSeries
     return {:teams => teams, :matches => matches}
   end
 
-  def self.createTeam (division, doc)
+  def self.createTeam division, doc
     rows = doc.css('.PageBodyDiv table:first tbody tr')
     rows.each do |row|
       cellContainers = row.css('td')
