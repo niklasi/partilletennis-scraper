@@ -1,10 +1,12 @@
 FROM ruby:2.4.9-stretch
 
-COPY src/ /app
 WORKDIR /app
 
+COPY src/Gemfile src/Gemfile.lock /app
 RUN gem install bundler
 RUN bundle install
+
+COPY src/ /app
 
 ENV PORT 8080
 
