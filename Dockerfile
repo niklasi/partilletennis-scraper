@@ -2,7 +2,7 @@ FROM ruby:2.4.9-stretch
 
 WORKDIR /app
 
-COPY src/Gemfile src/Gemfile.lock /app
+COPY src/Gemfile src/Gemfile.lock /app/
 RUN gem install bundler
 RUN bundle install
 
