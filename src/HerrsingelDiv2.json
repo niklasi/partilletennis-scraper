@@ -93,8 +93,8 @@
     {
       "home_team": "2",
       "away_team": "3",
-      "date": "2023-01-23",
-      "time": "20",
+      "date": "2023-01-22",
+      "time": "16",
       "lanes": "6",
       "division": "HerrsingelDiv2"
     },
@@ -107,19 +107,19 @@
       "division": "HerrsingelDiv2"
     },
     {
-      "home_team": "1",
-      "away_team": "2",
-      "date": "2023-01-29",
-      "time": "13",
-      "lanes": "6",
+      "home_team": "3",
+      "away_team": "7",
+      "date": "2022-01-29",
+      "time": "12",
+      "lanes": "5",
       "division": "HerrsingelDiv2"
     },
     {
-      "home_team": "3",
-      "away_team": "7",
-      "date": "2023-01-30",
-      "time": "21",
-      "lanes": "5",
+      "home_team": "1",
+      "away_team": "2",
+      "date": "2022-01-29",
+      "time": "13",
+      "lanes": "6",
       "division": "HerrsingelDiv2"
     },
     {
@@ -155,18 +155,18 @@
       "division": "HerrsingelDiv2"
     },
     {
-      "home_team": "3",
-      "away_team": "5",
-      "date": "2023-02-13",
-      "time": "21",
-      "lanes": "1",
-      "division": "HerrsingelDiv2"
-    },
-    {
       "home_team": "4",
       "away_team": "6",
       "date": "2023-02-13",
       "time": "21",
+      "lanes": "5",
+      "division": "HerrsingelDiv2"
+    },
+    {
+      "home_team": "3",
+      "away_team": "5",
+      "date": "2023-02-19",
+      "time": "12",
       "lanes": "5",
       "division": "HerrsingelDiv2"
     },
@@ -189,8 +189,8 @@
     {
       "home_team": "6",
       "away_team": "3",
-      "date": "2023-02-20",
-      "time": "21",
+      "date": "2023-02-21",
+      "time": "12",
       "lanes": "6",
       "division": "HerrsingelDiv2"
     },
