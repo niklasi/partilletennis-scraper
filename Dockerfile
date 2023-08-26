@@ -1,4 +1,4 @@
-FROM ruby:2.6.0-stretch
+FROM ruby:2.6.10-buster
 
 WORKDIR /app
 
