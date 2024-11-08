@@ -1,0 +1,182 @@
+{
+  "teams": [
+    {
+      "team_ranking": "1",
+      "division": "1",
+      "team_name": "Bröderna PC",
+      "contact": "Linus Johansson",
+      "email": "linjoh730326@gmail.com",
+      "phone": "0739-098035"
+    },
+    {
+      "team_ranking": "2",
+      "division": "1",
+      "team_name": "Kopiator",
+      "contact": "Ola Gullme",
+      "email": "ola.gullme@gmail.com",
+      "phone": "0705-898099"
+    },
+    {
+      "team_ranking": "3",
+      "division": "1",
+      "team_name": "Partille Elkonsult",
+      "contact": "Gustav Larsson",
+      "email": "gustav@partilleelkonsult.se",
+      "phone": "0703-734503"
+    },
+    {
+      "team_ranking": "4",
+      "division": "1",
+      "team_name": "PELA",
+      "contact": "Lasse Österberg",
+      "email": "larsosterberg64@gmail.com",
+      "phone": "0735-311113"
+    }
+  ],
+  "matches": [
+    {
+      "home_team": "1",
+      "away_team": "2",
+      "date": "2024-10-31",
+      "time": "18",
+      "lanes": "3",
+      "division": "1"
+    },
+    {
+      "home_team": "3",
+      "away_team": "4",
+      "date": "2024-10-31",
+      "time": "18",
+      "lanes": "2",
+      "division": "1"
+    },
+    {
+      "home_team": "1",
+      "away_team": "3",
+      "date": "2024-10-31",
+      "time": "19",
+      "lanes": "3",
+      "division": "1"
+    },
+    {
+      "home_team": "2",
+      "away_team": "4",
+      "date": "2024-10-31",
+      "time": "19",
+      "lanes": "2",
+      "division": "1"
+    },
+    {
+      "home_team": "2",
+      "away_team": "1",
+      "date": "2024-11-05",
+      "time": "18",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "4",
+      "away_team": "2",
+      "date": "2024-11-05",
+      "time": "19",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "4",
+      "away_team": "1",
+      "date": "2024-11-05",
+      "time": "20",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "4",
+      "away_team": "3",
+      "date": "2024-11-14",
+      "time": "18",
+      "lanes": "2",
+      "division": "1"
+    },
+    {
+      "home_team": "3",
+      "away_team": "1",
+      "date": "2024-11-14",
+      "time": "19",
+      "lanes": "2",
+      "division": "1"
+    },
+    {
+      "home_team": "2",
+      "away_team": "3",
+      "date": "2024-11-19",
+      "time": "18",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "2",
+      "away_team": "4",
+      "date": "2024-11-19",
+      "time": "19",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "3",
+      "away_team": "4",
+      "date": "2024-11-19",
+      "time": "20",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "1",
+      "away_team": "2",
+      "date": "2024-12-03",
+      "time": "18",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "3",
+      "away_team": "2",
+      "date": "2024-12-03",
+      "time": "19",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "1",
+      "away_team": "4",
+      "date": "2024-12-03",
+      "time": "20",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "2",
+      "away_team": "3",
+      "date": "2024-12-05",
+      "time": "18",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "1",
+      "away_team": "3",
+      "date": "2024-12-05",
+      "time": "19",
+      "lanes": "1",
+      "division": "1"
+    },
+    {
+      "home_team": "4",
+      "away_team": "1",
+      "date": "2024-12-05",
+      "time": "20",
+      "lanes": "1",
+      "division": "1"
+    }
+  ]
+}
